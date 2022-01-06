@@ -1,0 +1,45 @@
+version: '3.4'
+
+services:
+  s_apigateway:
+    container_name: c_apigateway
+    image: keremcan/apigateway
+    build:
+      context: .
+      dockerfile: OcelotGateway/Dockerfile
+    networks:
+      - net_api
+      - int_net_api
+    ports:
+      - 80:80
+
+  s_contact_api:
+    container_name: c_contact_api
+    image: keremcan/contactapi
+    build:
+      context: .
+      dockerfile: Services/Contact/ContactApi/Dockerfile
+    networks:
+      - int_net_api
+    ports:
+      - 7000:7000
+
+  s_res_api:
+    container_name: c_res_api
+    image: keremcan/resapi
+    build:
+      context: .
+      dockerfile: Services/Reservation/ReservationApi/Dockerfile
+    networks:
+      - int_net_api
+    ports:
+      - 7001:7001
+
+
+networks:
+  net_api:
+    driver: bridge
+
+  int_net_api:
+    driver: overlay
+    internal: true
